@@ -1,17 +1,14 @@
-#
-# A couple of useful guides & docs:
-#
-# - Main Bitrise CLI docs: https://github.com/bitrise-io/bitrise/tree/master/_docs
-# - Step Development Guideline: https://github.com/bitrise-io/bitrise/blob/master/_docs/step-development-guideline.md
-# - Bitrise.yml format spec: https://github.com/bitrise-io/bitrise/blob/master/_docs/bitrise-yml-format-spec.md
-# - Bitrise docs: http://devcenter.bitrise.io/
-# - Bitrise CLI guides: http://devcenter.bitrise.io/bitrise-cli/
 title: Veracode Security
-summary: This step uploads your app to Veracode Security for app security testing.
-description: This setp uploads your app to Veracode Security for app security testing.
+summary: |
+  This step uploads your app to Veracode Security for app security testing.
+description: |
+  This setp uploads your app to Veracode Security for app security testing.
 website: https://github.com/ryanphillipthomas/bitrise-step-veracode-security
 source_code_url: https://github.com/ryanphillipthomas/bitrise-step-veracode-security
 support_url: https://github.com/ryanphillipthomas/bitrise-step-veracode-security/issues
+source:
+  git: https://github.com/ryanphillipthomas/bitrise-step-veracode-security.git
+  commit: 99a940437b30765be61998468d854b0d979c72e3
 host_os_tags:
   - osx-10.10
   - ubuntu-16.04
@@ -21,11 +18,9 @@ project_type_tags:
   - android
 type_tags:
   - test
-
 is_requires_admin_user: true
 is_always_run: false
 is_skippable: false
-
 deps:
   brew:
   - name: git
@@ -33,37 +28,44 @@ deps:
   apt_get:
   - name: git
   - name: wget
-
 toolkit:
   bash:
     entry_file: step.sh
-
 inputs:
-- veracode_api_id: $VERACODE_API_ID
+- veracode_api_id: null
   opts:
-    title: "API ID"
+    title: "Veracode API Credentials ID"
+    description: |-
+      Your Veracode API Credentials ID
+      https://help.veracode.com/r/c_api_credentials3
     is_sensitive: true
     is_required: true
-
-- veracode_api_secret: $VERACODE_API_SECRET
+- veracode_api_secret: null
   opts:
-    title: "API Secret"
+    title: "Veracode API Secret Key"
+    description: |-
+      Your Veracode API Secret Key
+      https://help.veracode.com/r/c_api_credentials3
     is_sensitive: true
     is_required: true
-
-- veracode_app_id: $VERACODE_APP_ID
+- veracode_app_id: null
   opts:
-    title: "App ID"
+    title: "Veracode Application ID"
+    description: |-
+      Your Veracode Application ID
+      https://help.veracode.com/r/r_applications_info
     is_required: true
-
-- file_upload_path: $FILE_UPLOAD_PATH
+- file_upload_path: null
   opts:
     title: "File Upload Path"
     is_required: true
-
 - auto_scan: "yes"
   opts:
-    title: Automatically starts a staic scan after pre-scan is complete.
+    title: Auto Scan
+    description: |-
+      Automatically starts a staic scan after pre-scan is complete
+      https://help.veracode.com/r/r_applications_info
+    is_required: true
     value_options:
     - "no"
     - "yes"
