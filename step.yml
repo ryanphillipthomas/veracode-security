@@ -18,13 +18,6 @@ type_tags:
 is_requires_admin_user: true
 is_always_run: false
 is_skippable: false
-deps:
-  brew:
-  - name: git
-  - name: wget
-  apt_get:
-  - name: git
-  - name: wget
 toolkit:
   bash:
     entry_file: step.sh
