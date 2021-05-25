@@ -49,7 +49,7 @@ inputs:
   opts:
     title: "File Upload Path"
     is_required: true
-- auto_scan: "yes"
+- auto_scan: "true"
   opts:
     title: Auto Scan
     description: |-
@@ -57,5 +57,5 @@ inputs:
       [https://help.veracode.com/r/r_applications_info](https://help.veracode.com/r/r_applications_info)
     is_required: true
     value_options:
-    - "no"
-    - "yes"
+    - "false"
+    - "true"
