@@ -78,23 +78,32 @@ function validate_required_input_with_options {
 # Main
 #=======================================
 
+sandbox_cmd=""
 #
 # Validate parameters
 echo_info "Configs:"
 echo_details "* veracode_api_id: ***"
 echo_details "* veracode_api_secret: ***"
-echo_details "* veracode_app_id: ***"
+echo_details "* veracode_app_name: $veracode_app_name"
+echo_details "* version: $veracode_app_version"
+
+if [ "${veracode_sandbox}" ] ; then
+    echo_details "* veracode_sandbox: $veracode_sandbox"
+fi
+
 echo_details "* file_upload_path: $file_upload_path"
 echo_details "* auto_scan: $auto_scan"
-
-if [ -z "${file_upload_path}" ] ; then
-    echo_fail "File path was not defined"
-fi
 
 if [ ! -z "${file_upload_path}" ] ; then
     validate_required_input "veracode_api_id" $veracode_api_id
     validate_required_input "veracode_api_secret" $veracode_api_secret
-    validate_required_input "veracode_app_id" $veracode_app_id
+    validate_required_input "veracode_app_name" $veracode_app_name
+
+    if [ "${veracode_sandbox}" ] ; then
+        validate_required_input "veracode_sandbox" $veracode_sandbox
+        sandbox_cmd="-createsandbox true -sandboxname ${veracode_sandbox}"
+    fi
+    
     validate_required_input "auto_scan" $auto_scan
 
     if [ ! -f "${file_upload_path}" ] ; then
@@ -105,14 +114,8 @@ fi
 if [ ! -z "${file_upload_path}" ] ; then
 # - Submit File
     echo echo_info "Uploading File To Veracode..."
-    echo_details "action -uploadfile"
     echo
-    java -jar $BITRISE_STEP_SOURCE_DIR/Veracode/API.jar -vid ${veracode_api_id} -vkey ${veracode_api_secret} -action uploadfile -appid ${veracode_app_id} -filepath ${file_upload_path}
-    echo_done "Success"
-    
-    echo echo_info "Beginning Prescan on Veracode..."
-    echo_details "action -beginprescan"
-    echo
-    java -jar $BITRISE_STEP_SOURCE_DIR/Veracode/API.jar -vid ${veracode_api_id} -vkey ${veracode_api_secret} -action beginprescan -appid ${veracode_app_id} -autoscan ${auto_scan}
-    echo_done "Success"
+    java -jar $BITRISE_STEP_SOURCE_DIR/Veracode/API.jar -vid ${veracode_api_id} -vkey ${veracode_api_secret} -createprofile false -action uploadandscan -appname ${veracode_app_name} -version ${veracode_app_version} ${sandbox_cmd} -autoscan ${auto_scan} -filepath ${file_upload_path}
+
+    [ $? -eq 0 ] && echo_done "Success" || echo_fail "Failed"
 fi
