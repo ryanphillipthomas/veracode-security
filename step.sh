@@ -91,10 +91,26 @@ if [ "${veracode_sandbox}" ] ; then
     echo_details "* veracode_sandbox: $veracode_sandbox"
 fi
 
+if [ "${ios_archive}" ] ; then
+    echo_details "* ios_archive: $ios_archive"
+fi
+
 echo_details "* file_upload_path: $file_upload_path"
 echo_details "* auto_scan: $auto_scan"
 
 if [ ! -z "${file_upload_path}" ] ; then
+
+    if [ "${ios_archive}" ] ; then
+        if [ ! -d "${ios_archive}" ] ; then
+            echo_fail "Archive path defined but the directory does not exist at path: ${ios_archive}"
+        fi
+
+        echo echo_info "Preparing iOS Archive..."
+        mv $ios_archive/Products/Applications $ios_archive/Payload
+        rm -R $ios_archive/Products
+        zip -r $file_upload_path $ios_archive/*
+    fi
+
     validate_required_input "veracode_api_id" $veracode_api_id
     validate_required_input "veracode_api_secret" $veracode_api_secret
     validate_required_input "veracode_app_name" $veracode_app_name
