@@ -69,3 +69,7 @@ inputs:
     value_options:
     - "false"
     - "true"
+- ios_archive: null
+  opts:
+    title: "iOS Archive Directory"
+    is_required: false
