@@ -106,9 +106,7 @@ if [ ! -z "${file_upload_path}" ] ; then
         fi
 
         echo echo_info "Preparing iOS Archive..."
-        mv $ios_archive/Products/Applications $ios_archive/Payload
-        rm -R $ios_archive/Products
-        zip -r $file_upload_path $ios_archive/*
+        zip -r $file_upload_path $ios_archive/
     fi
 
     validate_required_input "veracode_api_id" $veracode_api_id
